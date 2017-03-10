@@ -3,6 +3,9 @@
 
 #include <rwsua2017_libs/player.h>
 
+//test include rws message
+#include <rwsua2017_msgs/MakeAPlay.h>
+
 //indent your code!
 
 using namespace std;
