@@ -14,12 +14,12 @@ namespace rwsua2017
   {
     public:
       ros::NodeHandle n;
-      shared_ptr< vector<string> > red_team;
-      shared_ptr< vector<string> > green_team;
-      shared_ptr< vector<string> > blue_team;
-      shared_ptr< vector<string> > my_team;
-      shared_ptr< vector<string> > preys_team;
-      shared_ptr< vector<string> > hunters_team;
+      boost::shared_ptr< vector<string> > red_team;
+      boost::shared_ptr< vector<string> > green_team;
+      boost::shared_ptr< vector<string> > blue_team;
+      boost::shared_ptr< vector<string> > my_team;
+      boost::shared_ptr< vector<string> > preys_team;
+      boost::shared_ptr< vector<string> > hunters_team;
 
       Player(string argin_name, string argin_team_name = "blue")
       {
@@ -27,9 +27,9 @@ namespace rwsua2017
         this->name = argin_name;
 
         //Create the three teams
-        red_team = (shared_ptr<vector <string> >) new vector<string>();
-        green_team = (shared_ptr<vector <string> >) new vector<string>();
-        blue_team = (shared_ptr<vector <string> >) new vector<string>();
+        red_team = (boost::shared_ptr<vector <string> >) new vector<string>();
+        green_team = (boost::shared_ptr<vector <string> >) new vector<string>();
+        blue_team = (boost::shared_ptr<vector <string> >) new vector<string>();
 
         //ler parametrso com lista de jogadores por equipa
         n.getParam("red", *red_team);
