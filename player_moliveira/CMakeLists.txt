@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   rwsua2017_msgs
   message_runtime
   message_generation
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
