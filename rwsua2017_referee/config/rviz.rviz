@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 641
   - Class: rviz/Selection
@@ -57,7 +58,7 @@ Visualization Manager:
           Value: true
         player_moliveira:
           Value: true
-      Marker Scale: 1
+      Marker Scale: 3
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -100,7 +101,7 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 70.0348129
+      Scale: 81.4655075
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: 0
