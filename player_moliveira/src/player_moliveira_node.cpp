@@ -32,7 +32,7 @@ namespace rwsua2017
       MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
       //Subscribe tyo the make_a_play_message
-      sub = n.subscribe("/make_a_play/cheetah", 1000, &MyPlayer::makeAPlayCallback, this);
+      sub = n.subscribe("/make_a_play/cat", 1000, &MyPlayer::makeAPlayCallback, this);
 
         t1.setOrigin( tf::Vector3(1, 1, 0.0) );
         Quaternion q;
@@ -64,6 +64,7 @@ namespace rwsua2017
         tf::Transform t = t1  * t_mov;
         //Send the new transform to ROS
         br.sendTransform(StampedTransform(t, ros::Time::now(), "/map", name));
+        t1 = t;
       }
 
       vector<string> teammates;
