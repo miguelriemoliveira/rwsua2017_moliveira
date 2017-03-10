@@ -4,15 +4,15 @@
   <arg name="delay" default="10"/>
   <!--Load the parameters-->
   <rosparam command="load" file="$(find rwsua2017_referee)/params/default.yaml"/>
-  <!--[>Launch the referee<]-->
-  <!--<node pkg="rwsfi2016_referee" type="referee.py" name="referee"/>-->
+
+  <!--Launch the referee-->
+  <node pkg="rwsua2017_referee" type="referee.py" name="referee" required="true"/>
+
   <!--[>Launch the killer<]-->
   <!--[><node pkg="rwsfi2016_referee" type="killer.py" name="killer"/><]-->
   <!--[>Launch the visualization<]-->
   <node pkg="rviz" type="rviz" name="rviz" args="--display-config $(find rwsua2017_referee)/config/rviz.rviz" required="true"/>
 
-
-  <node pkg="rostopic" type="rostopic" name="make_a_play_publisher" args="pub /make_a_play" output="screen"/>
 
   <!--<node pkg="rwsfi2016_referee" type="draw_teams" name="draw_teams"/>-->
   <!--Launch the players-->

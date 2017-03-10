@@ -32,7 +32,7 @@ namespace rwsua2017
       MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
       //Subscribe tyo the make_a_play_message
-      sub = n.subscribe("/make_a_play", 1000, &MyPlayer::makeAPlayCallback, this);
+      sub = n.subscribe("/make_a_play/cheetah", 1000, &MyPlayer::makeAPlayCallback, this);
 
         t1.setOrigin( tf::Vector3(1, 1, 0.0) );
         Quaternion q;
