@@ -85,7 +85,7 @@ if __name__ == "__main__":
         print "pulling all reps from path ../" 
 
         #List all reps, i.e., folders starting by rws2016
-        rep_paths = sorted([os.path.join(path,o) for o in os.listdir(path) if os.path.isdir(os.path.join(path,o)) and 'rwsfi2016' in o])
+        rep_paths = sorted([os.path.join(path,o) for o in os.listdir(path) if os.path.isdir(os.path.join(path,o)) and 'rwsua2017' in o])
         #print rep_paths
 
         for rep_path in rep_paths:
