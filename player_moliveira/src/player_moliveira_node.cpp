@@ -26,6 +26,7 @@ namespace rwsua2017
 
       //PROPPERTIES
       Subscriber sub;
+      tf::TransformListener listener;
       TransformBroadcaster br;
       Transform t1;
 
@@ -52,6 +53,25 @@ namespace rwsua2017
         return x;
       }
 
+      float getAngleTo(string player_name)
+      {
+        tf::StampedTransform trans;
+        try{
+          listener.lookupTransform(name, player_name, ros::Time(0), trans);
+        }
+        catch (tf::TransformException ex){
+          ROS_ERROR("%s",ex.what());
+          ros::Duration(0.01).sleep();
+        }
+
+        float x = trans.getOrigin().x();
+        float y = trans.getOrigin().y();
+
+        cout << "x= " << x << " y= " << y << endl;
+
+        return atan2(y,x);
+
+      }
 
       void makeAPlayCallback(const rwsua2017_msgs::MakeAPlay::ConstPtr& msg)
       {
@@ -60,7 +80,9 @@ namespace rwsua2017
 
         //Definicao dos angulos de rotação e valores de translação 
         //DEVERIA SER CALCULADO PELA AI DO SISTEMA
-        float turn_angle = M_PI/10;
+        //float turn_angle = getAngleTo(preys_team->at(1));
+        float turn_angle = getAngleTo("jferreira");
+
         float displacement = msg->max_displacement;
 
         double max_t =  (M_PI/30);

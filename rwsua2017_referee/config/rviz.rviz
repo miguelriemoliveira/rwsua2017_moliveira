@@ -54,9 +54,19 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        bvieira:
+          Value: true
+        dcorreia:
+          Value: true
+        jferreira:
+          Value: true
+        jsousa:
+          Value: true
         map:
           Value: true
-        player_moliveira:
+        rmartins:
+          Value: true
+        vsilva:
           Value: true
       Marker Scale: 3
       Name: TF
@@ -65,7 +75,17 @@ Visualization Manager:
       Show Names: true
       Tree:
         map:
-          player_moliveira:
+          bvieira:
+            {}
+          dcorreia:
+            {}
+          jferreira:
+            {}
+          jsousa:
+            {}
+          rmartins:
+            {}
+          vsilva:
             {}
       Update Interval: 0
       Value: true
@@ -101,7 +121,7 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 81.4655075
+      Scale: 62.0672684
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: 0
