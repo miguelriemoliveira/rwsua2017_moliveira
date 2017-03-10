@@ -11,6 +11,7 @@
 
 
 using namespace std;
+using namespace boost;
 
 namespace rwsua2017
 {
@@ -18,48 +19,22 @@ namespace rwsua2017
   class MyPlayer: public Player
   {
     public:
-      ros::NodeHandle n;
-      int a;
+
+      //PROPPERTIES
       ros::Subscriber sub;
-      vector<string> red_team;
-      vector<string> green_team;
-      vector<string> blue_team;
 
-    MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
+      MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
-      //ler parametrso com lista de jogadores por equipa
-      n.getParam("red", red_team);
-      n.getParam("green", green_team);
-      n.getParam("blue", blue_team);
-
-      cout << "red team:" << endl; 
-      for (size_t i = 0; i < red_team.size(); ++i)
-      {
-        cout << red_team[i] << endl; 
-      }
-
-      cout << "green team:" << endl; 
-      for (size_t i = 0; i < green_team.size(); ++i)
-      {
-        cout << green_team[i] << endl; 
-      }
-
-      cout << "blue team:" << endl; 
-      for (size_t i = 0; i < blue_team.size(); ++i)
-      {
-        cout << blue_team[i] << endl; 
-      }
 
 
 
       //Subscribe tyo the make_a_play_message
       sub = n.subscribe("/make_a_play", 1000, &MyPlayer::makeAPlayCallback, this);
 
-      a = 7;
-      int b = 5;
 
       cout << "Initialized MyPlayer" << endl;
     };
+
 
       void makeAPlayCallback(const rwsua2017_msgs::MakeAPlay::ConstPtr& msg)
       {
@@ -67,6 +42,8 @@ namespace rwsua2017
       }
 
       vector<string> teammates;
+
+
 
   };
 }
