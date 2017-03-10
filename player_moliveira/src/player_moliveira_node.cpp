@@ -92,22 +92,14 @@ int main(int argc, char **argv)
 {
   cout << "Hello world" << endl;           
 
-  ros::init(argc, argv, "player_moliveira");
+  ros::init(argc, argv, "moliveira");
 
 
-  rwsua2017::MyPlayer myplayer("player_moliveira", "green");
+  rwsua2017::MyPlayer myplayer("moliveira", "green");
 
   cout << "name = " << myplayer.name << endl;
-  cout << "team name = " << myplayer.get_team_name() << endl;
+  //cout << "team name = " << myplayer.get_team_name() << endl;
 
-  myplayer.teammates.push_back("fsilva");
-  myplayer.teammates.push_back("vsilva");
-
-  //ciclo for tipico em c
-  //int i;
-  //for (i=0; i < 5; i = i + 1)
-
-  cout << "teammates:" << endl; 
   for (size_t i = 0; i < myplayer.teammates.size(); ++i)
   {
     cout << myplayer.teammates[i] << endl; 
