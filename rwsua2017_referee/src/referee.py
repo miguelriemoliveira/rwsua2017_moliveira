@@ -35,104 +35,100 @@ teamC = []
 selected_team_count = 0
 game_pause = False
 
-def gameQueryCallback(event):
-    global teamA, teamB, teamC, selected_team_count, game_pause, score
-    game_pause = True 
+#def gameQueryCallback(event):
+    #global teamA, teamB, teamC, selected_team_count, game_pause, score
+    #game_pause = True 
 
-    print("\n\ngameQueryCallback\n\n") 
-    print("selected_team_count = " + str(selected_team_count)) 
+    #print("\n\ngameQueryCallback\n\n") 
+    #print("selected_team_count = " + str(selected_team_count)) 
 
-    # percorrer a lista de equipas
-    team_list = [teamA, teamB, teamC]
+    ## percorrer a lista de equipas
+    #team_list = [teamA, teamB, teamC]
     
-    selected_team = team_list[selected_team_count]
+    #selected_team = team_list[selected_team_count]
     
     
-    #print("team_list is = " + str(team_list)) 
-    #print("selected_team is = " + str(selected_team)) 
+    ##print("team_list is = " + str(team_list)) 
+    ##print("selected_team is = " + str(selected_team)) 
 
-    # sortear um jogador alive da equipa desta iteracao
+    ## sortear um jogador alive da equipa desta iteracao
 
-    selected_player = random.choice(selected_team)
-    #selected_player = "idomingues"
-    #print("selected_player is = " + str(selected_player)) 
+    #selected_player = random.choice(selected_team)
+    ##selected_player = "idomingues"
+    ##print("selected_player is = " + str(selected_player)) 
 
-    # sortear um objeto
-    objects = ["banana", "soda_can", "onion", "tomato"]
-    selected_object = random.choice(objects)
+    ## sortear um objeto
+    #objects = ["banana", "soda_can", "onion", "tomato"]
+    #selected_object = random.choice(objects)
 
-    rospack = rospkg.RosPack()
-    path_pcd = rospack.get_path('rwsua2017_referee') + "/../pcd/"
-    file_pcd = path_pcd + selected_object + ".pcd"
-    #print("vou ler o " + str(file_pcd))
+    #rospack = rospkg.RosPack()
+    #path_pcd = rospack.get_path('rwsua2017_referee') + "/../pcd/"
+    #file_pcd = path_pcd + selected_object + ".pcd"
+    ##print("vou ler o " + str(file_pcd))
 
-    # pedir ao pcd2pointcloud para enviar o objeto
+    ## pedir ao pcd2pointcloud para enviar o objeto
 
-    cmd = "rosrun rwsfi2016_referee pcd2pointcloud _input:="+ file_pcd + " _output:=/object_point_cloud /map:=" + selected_player + " _one_shot:=1"
-    #print "Executing command: " + cmd
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in p.stdout.readlines():
-        print line,
-        p.wait()
+    #cmd = "rosrun rwsfi2016_referee pcd2pointcloud _input:="+ file_pcd + " _output:=/object_point_cloud /map:=" + selected_player + " _one_shot:=1"
+    ##print "Executing command: " + cmd
+    #p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #for line in p.stdout.readlines():
+        #print line,
+        #p.wait()
 
-    # sleep for duration (to make sure people get the point clouds)
-    d = rospy.Duration(2, 0)
-    rospy.sleep(d)
+    ## sleep for duration (to make sure people get the point clouds)
+    #d = rospy.Duration(2, 0)
+    #rospy.sleep(d)
  
-    # chamar o servico game_query
-    service_name = "/" + selected_player + "/game_query"
-    correct_response = False
+    ## chamar o servico game_query
+    #service_name = "/" + selected_player + "/game_query"
+    #correct_response = False
 
-    try:
-        rospy.wait_for_service(service_name, 1)
-    except rospy.ROSException, e:
-        print("Perguntei " + selected_object + " ao " + selected_player + " e ele(a) nao deu resposta")
-        print("RESPOSTA AUSENTE!  ...")
+    #try:
+        #rospy.wait_for_service(service_name, 1)
+    #except rospy.ROSException, e:
+        #print("Perguntei " + selected_object + " ao " + selected_player + " e ele(a) nao deu resposta")
+        #print("RESPOSTA AUSENTE!  ...")
 
-    try:
-        game_query = rospy.ServiceProxy(service_name, GameQuery)
-        resp1 = game_query()
-        print("Perguntei " + selected_object + " ao " + selected_player + " e ele respondeu " + resp1.resposta)
-        # verificar a resposta e afetar a pontuacao
-        if selected_object == resp1.resposta:
-            print("RESPOSTA CERTA! FANTASTICO")
-            correct_response = True
-        else:
-            print("RESPOSTA ERRADA! NAO PERCEBES NADA DISTO ...")
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-
-    print("score before:" + str(score))
-    if correct_response == True:
-        score[selected_team_count] = score[selected_team_count] + 5 
-    else:
-        score[selected_team_count] = score[selected_team_count] - 5 
+    #try:
+        #game_query = rospy.ServiceProxy(service_name, GameQuery)
+        #resp1 = game_query()
+        #print("Perguntei " + selected_object + " ao " + selected_player + " e ele respondeu " + resp1.resposta)
+        ## verificar a resposta e afetar a pontuacao
+        #if selected_object == resp1.resposta:
+            #print("RESPOSTA CERTA! FANTASTICO")
+            #correct_response = True
+        #else:
+            #print("RESPOSTA ERRADA! NAO PERCEBES NADA DISTO ...")
+    #except rospy.ServiceException, e:
+        #print "Service call failed: %s"%e
 
 
-
-    print("score after:" + str(score))
-
-    if selected_team_count == 2:
-        selected_team_count = 0
-    else:
-        selected_team_count = selected_team_count + 1
+    #print("score before:" + str(score))
+    #if correct_response == True:
+        #score[selected_team_count] = score[selected_team_count] + 5 
+    #else:
+        #score[selected_team_count] = score[selected_team_count] - 5 
 
 
 
-    # sleep for duration (to make sure people get the point clouds)
-    rospy.sleep(d)
+    #print("score after:" + str(score))
+
+    #if selected_team_count == 2:
+        #selected_team_count = 0
+    #else:
+        #selected_team_count = selected_team_count + 1
+
+
+
+    ## sleep for duration (to make sure people get the point clouds)
+    #rospy.sleep(d)
    
-    game_pause = False 
+    #game_pause = False 
 
 def timerCallback(event):
     global game_pause
     if game_pause == True:
         return 
-
-    #int a = 1;
-    #a = 1;
-    #a = [];
 
     a = MakeAPlay()
 
@@ -240,7 +236,7 @@ def talker():
     rospy.Timer(rospy.Duration(0.1), timerCallback, oneshot=False)
     rospy.Timer(rospy.Duration(game_duration), gameEndCallback, oneshot=True)
 
-    rospy.Timer(rospy.Duration(5000000), gameQueryCallback, oneshot=False)
+    #rospy.Timer(rospy.Duration(5000000), gameQueryCallback, oneshot=False)
 
     game_start = rospy.get_time()
 
@@ -361,8 +357,6 @@ def talker():
 
 
         ma_killed = MarkerArray()
-
-
 
         kill_time = rospy.Time.now()
         for tbk in to_be_killed_A:

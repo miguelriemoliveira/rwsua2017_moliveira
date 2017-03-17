@@ -4,17 +4,13 @@
   <arg name="delay" default="10"/>
   <!--Load the parameters-->
   <rosparam command="load" file="$(find rwsua2017_referee)/params/default.yaml"/>
-
   <!--Launch the referee-->
   <node pkg="rwsua2017_referee" type="referee.py" name="referee" required="true"/>
-
-  <!--[>Launch the killer<]-->
-  <!--[><node pkg="rwsfi2016_referee" type="killer.py" name="killer"/><]-->
-  <!--[>Launch the visualization<]-->
+  <!--Launch the killer-->
+  <node pkg="rwsua2017_referee" type="killer.py" name="killer"/>
+  <!--Launch the visualization-->
   <node pkg="rviz" type="rviz" name="rviz" args="--display-config $(find rwsua2017_referee)/config/rviz.rviz" required="true"/>
-
-
-  <!--<node pkg="rwsfi2016_referee" type="draw_teams" name="draw_teams"/>-->
+  <node pkg="rwsua2017_referee" type="draw_teams" name="draw_teams"/>
   <!--Launch the players-->
   <!--Team red-->
   <node pkg="player_moliveira" type="player_moliveira_node" name="moliveira" output="screen" respawn="true" respawn_delay="$(arg delay)"/>

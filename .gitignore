@@ -31,3 +31,5 @@
 #vim temp files
 *.swp
 *.swo
+
+doc/*
