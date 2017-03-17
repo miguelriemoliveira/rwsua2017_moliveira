@@ -14,6 +14,11 @@ find_package(catkin REQUIRED COMPONENTS
   rwsua2017_msgs
 )
 
+find_package(PCL 1.2 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS}) 
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -135,6 +140,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(draw_teams src/draw_teams.cpp)
+add_executable(pcd2pointcloud src/pcd2pointcloud.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +156,11 @@ add_executable(draw_teams src/draw_teams.cpp)
 target_link_libraries(draw_teams
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(pcd2pointcloud
+  ${catkin_LIBRARIES} ${PCL_LIBRARIES}
+)
+
 
 #############
 ## Install ##

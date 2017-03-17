@@ -30,6 +30,7 @@ namespace rwsua2017
       tf::TransformListener listener;
       TransformBroadcaster br;
       ros::Publisher vis_pub;
+      bool hunting;
 
       MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
@@ -45,6 +46,8 @@ namespace rwsua2017
       q.setRPY(0, 0, 0);
       t1.setRotation(q);
       br.sendTransform(tf::StampedTransform(t1, ros::Time::now(), "map", name));
+
+      hunting = true;
 
       ROS_INFO_STREAM("Initialized MyPlayer");
     };
@@ -111,6 +114,7 @@ namespace rwsua2017
         catch (tf::TransformException ex){
           ROS_ERROR("%s",ex.what());
           ros::Duration(0.01).sleep();
+          return 10000;
         }
 
         float x = trans.getOrigin().x();
@@ -147,11 +151,39 @@ namespace rwsua2017
         ROS_INFO_STREAM("received a make a play msg with max_displacement = " << msg->max_displacement);
 
         //Definicao dos angulos de rotação e valores de translação 
-        string player_to_hunt = getClosestPlayer(msg->green_alive);
+        string closest_prey = getClosestPlayer(msg->green_alive);
+        string closest_hunter = getClosestPlayer(msg->blue_alive);
+
+        float closest_prey_d = getDistanceToPlayer(closest_prey);
+        float closest_hunter_d = getDistanceToPlayer(closest_hunter);
+
+        //Change values to obtain histeresis behaviour
+        if (hunting)
+        {
+          closest_prey_d = closest_prey_d * 0.8;
+        }
+        else
+        {
+          closest_hunter_d = closest_hunter_d * 0.8; 
+        }
+
+        if (closest_hunter_d > closest_prey_d)
+        {
+          hunting = false;
+        }
+        else
+        {
+          hunting = true;
+        }
 
 
-        float turn_angle = getAngleTo(player_to_hunt);
-        float displacement = 0.5;
+
+        string anchor_player = "jferreira";
+        float turn_angle;
+       
+        = getAngleTo(player_to_hunt);
+
+        float displacement = msg->max_displacement;
 
         ROS_INFO("Hunting player %s", player_to_hunt.c_str());
 
