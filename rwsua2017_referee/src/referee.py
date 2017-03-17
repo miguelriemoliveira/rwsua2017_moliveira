@@ -215,6 +215,9 @@ def gameEndCallback(event):
     pub_score.publish(ma)
     rate.sleep()
 
+
+    rospy.spin()
+
     rospy.signal_shutdown("Game finished")
 
 def talker():
@@ -262,47 +265,49 @@ def talker():
         max_distance_from_center_of_arena = 8
 
         #Checking if players don't stray from the arena
-        for player in teamA:
-            #check if hunter is killed
-            result = [item for item in killed if item[0] == player]
-            if not result:
-                try:
-                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    if distance > max_distance_from_center_of_arena:
-                        to_be_killed_A.append(player);
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    t=1
+        #for player in teamA:
+            ##check if hunter is killed
+            #result = [item for item in killed if item[0] == player]
+            #if not result:
+                #try:
+                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    #if distance > max_distance_from_center_of_arena:
+                        #to_be_killed_A.append(player);
+                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    #t=1
                     #rospy.loginfo("Referee: tf error")
 
-        for player in teamB:
-            #check if hunter is killed
-            result = [item for item in killed if item[0] == player]
-            if not result:
-                try:
-                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    if distance > max_distance_from_center_of_arena:
-                        to_be_killed_A.append(player);
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    t=1
+        #for player in teamB:
+            ##check if hunter is killed
+            #result = [item for item in killed if item[0] == player]
+            #if not result:
+                #try:
+                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    #if distance > max_distance_from_center_of_arena:
+                        #to_be_killed_B.append(player);
+                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    #t=1
                     #rospy.loginfo("Referee: tf error")
 
-        for player in teamC:
-            #check if hunter is killed
-            result = [item for item in killed if item[0] == player]
-            if not result:
-                try:
-                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    if distance > max_distance_from_center_of_arena:
-                        to_be_killed_A.append(player);
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    t=1
+        #for player in teamC:
+            ##check if hunter is killed
+            #result = [item for item in killed if item[0] == player]
+            #if not result:
+                #try:
+                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    #if distance > max_distance_from_center_of_arena:
+                        #to_be_killed_C.append(player);
+                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    #t=1
                     #rospy.loginfo("Referee: tf error")
+
+        rospy.loginfo("to_be_killed is %s", str(to_be_killed_B))
 
         #Check if anyone is hunted
 

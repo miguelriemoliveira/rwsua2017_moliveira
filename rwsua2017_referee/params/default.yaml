@@ -5,4 +5,4 @@ blue: ["jsousa","vsilva","dcorreia"]
 hunting_distance: 0.5
 game_duration: 120
 positive_score: 1
-negative_score: -1
+negative_score: -2

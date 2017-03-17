@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         marker.type = visualization_msgs::Marker::ARROW;
         marker.scale.x = 0.5; marker.scale.y = 0.1; marker.scale.z = 0.1;
         marker.color.a = 0.7; // Don't forget to set the alpha!
-        marker.color.r = 0.0; marker.color.g = 1.0; marker.color.b = 0.0;
+        marker.color.r = 0.0; marker.color.g = 0.6; marker.color.b = 0.0;
         ma.markers.push_back(marker);
 
         //Draw text
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
         marker.scale.x = 0.8; marker.scale.y = 0.2; marker.scale.z = 0.5;
         marker.color.a = 1.0; // Don't forget to set the alpha!
-        marker.color.r = 0.0; marker.color.g = 1.0; marker.color.b = 0.0;
+        marker.color.r = 0.0; marker.color.g = 0.6; marker.color.b = 0.0;
         marker.text = teamB[i];
         ma.markers.push_back(marker);
 

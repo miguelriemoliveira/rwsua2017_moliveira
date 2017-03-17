@@ -6,6 +6,7 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
+#include <visualization_msgs/Marker.h>
 
 //Local includes
 #include <rwsua2017_libs/player.h>
@@ -28,11 +29,15 @@ namespace rwsua2017
       Subscriber sub;
       tf::TransformListener listener;
       TransformBroadcaster br;
+      ros::Publisher vis_pub;
 
       MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
       //Subscribe tyo the make_a_play_message
       sub = n.subscribe("/make_a_play/cat", 1000, &MyPlayer::makeAPlayCallback, this);
+
+      vis_pub = n.advertise<visualization_msgs::Marker>( "/bocas", 0 );
+
 
       Transform t1;
       t1.setOrigin( tf::Vector3(randNumber(),randNumber(), 0.0) );
@@ -99,17 +104,61 @@ namespace rwsua2017
       {
         cout << "received a make a play msg with max_displacement = " << msg->max_displacement << endl;
 
-
         //Definicao dos angulos de rotação e valores de translação 
-        //DEVERIA SER CALCULADO PELA AI DO SISTEMA
-        //float turn_angle = getAngleTo(preys_team->at(1));
-        float turn_angle = getAngleTo("jferreira");
+        float turn_angle = getAngleTo("fsilva");
+        float displacement = 0.5;
 
-        float displacement = msg->max_displacement;
+        if (msg->blue_alive.size() > 0) //there are alive hunters, let's flee
+        {
+          //find the closest hunter ... cannot do this now so will just flee from vsilva
+          turn_angle = getAngleTo("vsilva") + 5*M_PI/6;
+          ROS_INFO("Fleeing from vsilva");
+        } 
+        else
+        {
+          //just use the default values 
+        }
 
-        double max_t =  (M_PI/30);
+
+       
+
+        //move my player
+        move(displacement, turn_angle, msg->max_displacement, M_PI/30);
+
+        //enviar boca
+        visualization_msgs::Marker marker;
+        marker.header.frame_id = name;
+        marker.header.stamp = ros::Time();
+        marker.ns = name;
+        marker.id = 0;
+        marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+        marker.action = visualization_msgs::Marker::ADD;
+        marker.pose.position.x = 0; marker.pose.position.y = 0.4; marker.pose.position.z = 0;
+        marker.pose.orientation.x = 0.0; marker.pose.orientation.y = 0.0; marker.pose.orientation.z = 0.0;
+        marker.pose.orientation.w = 1.0;
+        marker.scale.z = 0.4;
+        marker.color.a = 1.0; // Don't forget to set the alpha!
+        marker.color.r = 0.3;
+        marker.color.g = 0.3;
+        marker.color.b = 0.3;
+        marker.frame_locked = 1;
+        marker.lifetime = ros::Duration(1);
+        marker.text = "nao percebes nada disto";
+        vis_pub.publish(marker);
+      }
+
+      void move(float displacement, float turn_angle, float max_displacement, float max_turn_angle)
+      {
+        //Saturate tunr angle
+        double max_t =  max_turn_angle;
         if (turn_angle > max_t) turn_angle = max_t;
         else if (turn_angle < -max_t) turn_angle = -max_t;
+
+        //Saturate displacement
+        if (displacement > max_displacement)
+        {
+          displacement = max_displacement;
+        }
 
         //Compute the new reference frame
         tf::Transform t_mov;
