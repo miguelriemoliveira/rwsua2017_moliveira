@@ -28,13 +28,13 @@ namespace rwsua2017
       Subscriber sub;
       tf::TransformListener listener;
       TransformBroadcaster br;
-      Transform t1;
 
       MyPlayer(string argin_name, string argin_team_name): Player(argin_name, argin_team_name)
     {
       //Subscribe tyo the make_a_play_message
       sub = n.subscribe("/make_a_play/cat", 1000, &MyPlayer::makeAPlayCallback, this);
 
+      Transform t1;
       t1.setOrigin( tf::Vector3(randNumber(),randNumber(), 0.0) );
       Quaternion q;
       q.setRPY(0, 0, 0);
@@ -73,6 +73,22 @@ namespace rwsua2017
 
       }
 
+      tf::StampedTransform getPose(void)
+      {
+        tf::StampedTransform trans;
+        try{
+          listener.lookupTransform("map", name, ros::Time(0), trans);
+        }
+        catch (tf::TransformException ex){
+          ROS_ERROR("%s",ex.what());
+          ros::Duration(0.01).sleep();
+        }
+
+        return trans;
+      
+      }
+
+
       void makeAPlayCallback(const rwsua2017_msgs::MakeAPlay::ConstPtr& msg)
       {
         cout << "received a make a play msg with max_displacement = " << msg->max_displacement << endl;
@@ -96,10 +112,9 @@ namespace rwsua2017
         t_mov.setRotation(q);
         t_mov.setOrigin( Vector3(displacement , 0.0, 0.0) );
 
-        tf::Transform t = t1  * t_mov;
+        tf::Transform t = getPose()  * t_mov;
         //Send the new transform to ROS
         br.sendTransform(StampedTransform(t, ros::Time::now(), "/map", name));
-        t1 = t;
       }
 
       vector<string> teammates;
