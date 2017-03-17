@@ -24,4 +24,7 @@
   <node pkg="player_jsousa" type="player_jsousa_node" name="jsousa" output="screen" respawn="true" respawn_delay="$(arg delay)"/>
   <node pkg="player_vsilva" type="player_vsilva_node" name="vsilva" output="screen" respawn="true" respawn_delay="$(arg delay)"/>
   <node pkg="player_dcorreia" type="player_dcorreia_node" name="dcorreia" output="screen" respawn="true" respawn_delay="$(arg delay)"/>
+
+  <node name="rosbag_record" pkg="rosbag" type="record" output="screen" args=" -a -o /tmp/rwsua2017"/>
+
 </launch>

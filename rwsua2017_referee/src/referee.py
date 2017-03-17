@@ -262,49 +262,52 @@ def talker():
         to_be_killed_A = [];
         to_be_killed_B = [];
         to_be_killed_C = [];
+        out_of_arena_A = [];
+        out_of_arena_B = [];
+        out_of_arena_C = [];
         max_distance_from_center_of_arena = 8
 
         #Checking if players don't stray from the arena
-        #for player in teamA:
-            ##check if hunter is killed
-            #result = [item for item in killed if item[0] == player]
-            #if not result:
-                #try:
-                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    #if distance > max_distance_from_center_of_arena:
-                        #to_be_killed_A.append(player);
-                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    #t=1
+        for player in teamA:
+            #check if hunter is killed
+            result = [item for item in killed if item[0] == player]
+            if not result:
+                try:
+                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    if distance > max_distance_from_center_of_arena:
+                        out_of_arena_A.append(player);
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    t=1
                     #rospy.loginfo("Referee: tf error")
 
-        #for player in teamB:
-            ##check if hunter is killed
-            #result = [item for item in killed if item[0] == player]
-            #if not result:
-                #try:
-                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    #if distance > max_distance_from_center_of_arena:
-                        #to_be_killed_B.append(player);
-                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    #t=1
+        for player in teamB:
+            #check if hunter is killed
+            result = [item for item in killed if item[0] == player]
+            if not result:
+                try:
+                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    if distance > max_distance_from_center_of_arena:
+                        out_of_arena_B.append(player);
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    t=1
                     #rospy.loginfo("Referee: tf error")
 
-        #for player in teamC:
-            ##check if hunter is killed
-            #result = [item for item in killed if item[0] == player]
-            #if not result:
-                #try:
-                    #(trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
-                    #distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
-                    ##rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
-                    #if distance > max_distance_from_center_of_arena:
-                        #to_be_killed_C.append(player);
-                #except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    #t=1
+        for player in teamC:
+            #check if hunter is killed
+            result = [item for item in killed if item[0] == player]
+            if not result:
+                try:
+                    (trans,rot) = listener.lookupTransform("/map", player, rospy.Time(0))
+                    distance = math.sqrt(trans[0]*trans[0] + trans[1]*trans[1])
+                    #rospy.loginfo("D from %s to %s is %f", hunter, prey, distance)
+                    if distance > max_distance_from_center_of_arena:
+                        out_of_arena_C.append(player);
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    t=1
                     #rospy.loginfo("Referee: tf error")
 
         rospy.loginfo("to_be_killed is %s", str(to_be_killed_B))
@@ -485,6 +488,129 @@ def talker():
                 t=1
                 #rospy.logwarn("%s was already hunted", tbk)
         
+        #--------------------------------
+        #Killing because of stray from arena
+        #--------------------------------
+        for tbk in out_of_arena_A:
+            #rospy.logwarn("%s is to be killed by Team A", tbk)
+
+            #Check if tbk is in the list of killed players
+            found = False
+            for item in killed:
+                if item[0] == tbk:
+                    found = True
+            
+            if found == False:
+                killed.append((tbk,kill_time))
+                rospy.logwarn("Red hunted %s", tbk)
+                score[0] = score[0] + negative_score
+                s = String()
+                s.data = tbk
+                #pub_killer.publish(s)
+                mk1 = Marker()
+                mk1.header.frame_id = "/map"
+                (trans,rot) = listener.lookupTransform("/map", tbk, rospy.Time(0))
+                mk1.pose.position.x = trans[0]
+                mk1.pose.position.y = trans[1]
+                mk1.type = mk1.TEXT_VIEW_FACING
+                mk1.action = mk1.ADD
+                mk1.id = 0;
+                mk1.ns = tbk
+                mk1.scale.z = 0.4
+                mk1.color.a = 1.0
+                mk1.text = "Queres fugir " + tbk + "?"
+                mk1.lifetime = rospy.Duration.from_sec(5)
+                mk1.frame_locked = 0
+                ma_killed.markers.append(mk1)
+
+                broadcaster.sendTransform((-100, -100, 0), tf.transformations.quaternion_from_euler(0, 0, 0), kill_time, tbk, "/map")
+
+
+            else:
+                t=1
+                #rospy.logwarn("%s was already hunted", tbk)
+
+
+        for tbk in out_of_arena_B:
+            #rospy.logwarn("%s is to be killed by Team B", tbk)
+
+            #Check if tbk is in the list of killed players
+            found = False
+            for item in killed:
+                if item[0] == tbk:
+                    found = True
+            
+            if found == False:
+                killed.append((tbk,kill_time))
+                rospy.logwarn("Green hunted %s", tbk)
+                score[1] = score[1] + negative_score
+                s = String()
+                s.data = tbk
+                #pub_killer.publish(s)
+
+                mk1 = Marker()
+                mk1.header.frame_id = "/map"
+                (trans,rot) = listener.lookupTransform("/map", tbk, rospy.Time(0))
+                mk1.pose.position.x = trans[0]
+                mk1.pose.position.y = trans[1]
+                mk1.type = mk1.TEXT_VIEW_FACING
+                mk1.action = mk1.ADD
+                mk1.id = 0;
+                mk1.ns = tbk
+                mk1.scale.z = 0.4
+                mk1.color.a = 1.0
+                mk1.text = "Queres fugir " + tbk + "?"
+                mk1.lifetime = rospy.Duration.from_sec(5)
+                mk1.frame_locked = 0
+                ma_killed.markers.append(mk1)
+                broadcaster.sendTransform((100, -100, 0), tf.transformations.quaternion_from_euler(0, 0, 0), kill_time, tbk, "/map")
+
+            else:
+                t=1
+                #rospy.logwarn("%s was already hunted", tbk)
+
+            
+        for tbk in out_of_arena_C:
+            #rospy.logwarn("%s is to be killed by Team C", tbk)
+
+            #Check if tbk is in the list of killed players
+            found = False
+            for item in killed:
+                if item[0] == tbk:
+                    found = True
+            
+            if found == False:
+                killed.append((tbk,kill_time))
+                rospy.logwarn("Blue hunted %s", tbk)
+                score[2] = score[2] + negative_score
+                s = String()
+                s.data = tbk
+                #pub_killer.publish(s)
+
+                mk1 = Marker()
+                mk1.header.frame_id = "/map"
+                (trans,rot) = listener.lookupTransform("/map", tbk, rospy.Time(0))
+                mk1.pose.position.x = trans[0]
+                mk1.pose.position.y = trans[1]
+                mk1.type = mk1.TEXT_VIEW_FACING
+                mk1.action = mk1.ADD
+                mk1.id = 0;
+                mk1.ns = tbk
+                mk1.scale.z = 0.4
+                mk1.color.a = 1.0
+                mk1.text = "Queres fugir " + tbk + "?"
+                mk1.lifetime = rospy.Duration.from_sec(5)
+                mk1.frame_locked = 0
+                ma_killed.markers.append(mk1)
+                broadcaster.sendTransform((100, 100, 0), tf.transformations.quaternion_from_euler(0, 0, 0), kill_time, tbk, "/map")
+
+            else:
+                t=1
+                #rospy.logwarn("%s was already hunted", tbk)
+
+
+
+
         if ma_killed.markers:
             pub_rip.publish(ma_killed)
         #print killed

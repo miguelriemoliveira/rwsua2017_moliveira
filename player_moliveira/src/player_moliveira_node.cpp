@@ -46,7 +46,7 @@ namespace rwsua2017
       t1.setRotation(q);
       br.sendTransform(tf::StampedTransform(t1, ros::Time::now(), "map", name));
 
-      cout << "Initialized MyPlayer" << endl;
+      ROS_INFO_STREAM("Initialized MyPlayer");
     };
 
       double randNumber(){
@@ -96,28 +96,78 @@ namespace rwsua2017
         }
 
         return trans;
-      
       }
 
+      float getDistanceToPlayer(string player_name, float time_to_wait = 0.1)
+      {
+        tf::StampedTransform trans;
+        ros::Time now = Time(0); //get the latest transform received
+
+        try
+        {
+          listener.waitForTransform(name, player_name, now, Duration(time_to_wait));
+          listener.lookupTransform(name, player_name, now, trans);
+        }
+        catch (tf::TransformException ex){
+          ROS_ERROR("%s",ex.what());
+          ros::Duration(0.01).sleep();
+        }
+
+        float x = trans.getOrigin().x();
+        float y = trans.getOrigin().y();
+        return sqrt(x*x + y*y);
+      }
+
+      string getClosestPlayer(vector<string> players)
+      {
+        
+        string closest_player = "";
+        float min_distance = 100000;
+
+        for (size_t i=0; i < players.size(); ++i)
+        {
+          float d = getDistanceToPlayer(players[i]);
+          if (d < min_distance) 
+          {
+            min_distance = d;
+            closest_player = players[i];
+          }
+        }
+
+        if (closest_player == "")
+        {
+          ROS_WARN("Could not find closest player");
+        }
+
+        return closest_player;
+      }
 
       void makeAPlayCallback(const rwsua2017_msgs::MakeAPlay::ConstPtr& msg)
       {
-        cout << "received a make a play msg with max_displacement = " << msg->max_displacement << endl;
+        ROS_INFO_STREAM("received a make a play msg with max_displacement = " << msg->max_displacement);
 
         //Definicao dos angulos de rotação e valores de translação 
-        float turn_angle = getAngleTo("fsilva");
+        string player_to_hunt = getClosestPlayer(msg->green_alive);
+
+
+        float turn_angle = getAngleTo(player_to_hunt);
         float displacement = 0.5;
 
-        if (msg->blue_alive.size() > 0) //there are alive hunters, let's flee
-        {
-          //find the closest hunter ... cannot do this now so will just flee from vsilva
-          turn_angle = getAngleTo("vsilva") + 5*M_PI/6;
-          ROS_INFO("Fleeing from vsilva");
-        } 
-        else
-        {
-          //just use the default values 
-        }
+        ROS_INFO("Hunting player %s", player_to_hunt.c_str());
+
+        ROS_WARN("This is a warning");
+        ROS_ERROR("This is an error");
+
+        //if (msg->blue_alive.size() > 0) //there are alive hunters, let's flee
+        //{
+          ////find the closest hunter ... cannot do this now so will just flee from vsilva
+          //turn_angle = getAngleTo("vsilva") + 5*M_PI/6;
+          //ROS_INFO("Fleeing from vsilva");
+        //} 
+        //else
+        //{
+          ////just use the default values 
+        //}
 
 
        
@@ -143,7 +193,7 @@ namespace rwsua2017
         marker.color.b = 0.3;
         marker.frame_locked = 1;
         marker.lifetime = ros::Duration(1);
-        marker.text = "nao percebes nada disto";
+        marker.text = "nao gosto de bocas!";
         vis_pub.publish(marker);
       }
 
