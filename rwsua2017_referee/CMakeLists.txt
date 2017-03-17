@@ -14,10 +14,10 @@ find_package(catkin REQUIRED COMPONENTS
   rwsua2017_msgs
 )
 
-find_package(PCL 1.2 REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS}) 
+#find_package(PCL 1.2 REQUIRED)
+#include_directories(${PCL_INCLUDE_DIRS})
+#link_directories(${PCL_LIBRARY_DIRS})
+#add_definitions(${PCL_DEFINITIONS}) 
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -140,7 +140,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(draw_teams src/draw_teams.cpp)
-add_executable(pcd2pointcloud src/pcd2pointcloud.cpp)
+#add_executable(pcd2pointcloud src/pcd2pointcloud.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -157,49 +157,49 @@ target_link_libraries(draw_teams
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(pcd2pointcloud
-  ${catkin_LIBRARIES} ${PCL_LIBRARIES}
-)
+#target_link_libraries(pcd2pointcloud
+  #${catkin_LIBRARIES} ${PCL_LIBRARIES}
+#)
 
 
-#############
-## Install ##
-#############
+##############
+### Install ##
+##############
 
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
+## all install targets should use catkin DESTINATION variables
+## See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+### Mark executable scripts (Python etc.) for installation
+### in contrast to setup.py, you can choose the destination
+## install(PROGRAMS
+##   scripts/my_python_script
+##   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+## )
 
-## Mark executables and/or libraries for installation
-# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+### Mark executables and/or libraries for installation
+## install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
+##   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+##   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+##   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+## )
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+### Mark cpp header files for installation
+## install(DIRECTORY include/${PROJECT_NAME}/
+##   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+##   FILES_MATCHING PATTERN "*.h"
+##   PATTERN ".svn" EXCLUDE
+## )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+### Mark other files for installation (e.g. launch and bag files, etc.)
+## install(FILES
+##   # myfile1
+##   # myfile2
+##   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+## )
 
-#############
-## Testing ##
-#############
+##############
+### Testing ##
+##############
 
 ## Add gtest based cpp test target and link libraries
 # catkin_add_gtest(${PROJECT_NAME}-test test/test_rwsua2017_referee.cpp)

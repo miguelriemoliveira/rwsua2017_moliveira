@@ -178,14 +178,22 @@ namespace rwsua2017
 
 
 
-        string anchor_player = "jferreira";
-        float turn_angle;
+        string anchor_player;
        
-        = getAngleTo(player_to_hunt);
-
+        if (hunting)
+        {
+          anchor_player = closest_prey;
+          ROS_INFO("Hunting %s", anchor_player.c_str());
+        } 
+        else
+        {
+          anchor_player = closest_hunter;
+          ROS_INFO("fleeing fromr %s", anchor_player.c_str());
+        }
+       
+        float turn_angle = getAngleTo(anchor_player);
         float displacement = msg->max_displacement;
 
-        ROS_INFO("Hunting player %s", player_to_hunt.c_str());
 
         ROS_WARN("This is a warning");
         ROS_ERROR("This is an error");
